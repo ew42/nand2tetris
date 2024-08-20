@@ -1,72 +1,60 @@
-"""
-HackAssembler.py
-Takes HackAssembly and converts into binary instructions
-for the Hack CPU
+from parser import Parser
+from code import *
 
-Okay so it needs to loop
-    - read line
-    - if line //
-        next loop
-    - if line @
-        convert into a-instruct
-        write into xxx.hack
-    - if line has a first digit != '@'
-        convert into b-instruct
-        write into xxx.hack
-"""
+def assemble(filePath):
+    '''
+    filePath comes in
+    symbolTable = {}
+    with open(binFile.hack, 'w') as file:
+        firstRun = Parser(filePath)
+            while firstRun.hasMoreLines:
+                firstRun.advance()
+                if firstRun.instructionType() == lInstruct:
+                    firstRun.symbol(
+        secondRun = Parser(filePath)
+            while secondRun.hasMoreLines:
+                secondRun.advance()
+                kindOfInstruction = secondRun.instructionType()
+                if aInstuct:
+                    if secondRun.symbol()[0] == '0'/'1':
+                        file.write(0 + secondRun.symbol()):
+                    else:
+                        file.write(0 + symbolTable[secondRun.symbol()]
+    '''
+    symbolTable = {}
+    for x in range(16):
+        symbolTable['R'+str(x)] = x
 
-import argparse
-import re
+    symbolIncrement = 16
+    with open('binFile.txt', 'w') as file: #replace binFile.hack
+        firstRun = Parser(filePath)
+        while firstRun.hasMoreLines():
+            firstRun.advance()
+            if firstRun.instructionType() == 'L_INSTRUCTION':
+                symbolTable[firstRun.symbol()] = symbolIncrement
+                symbolIncrement += 1
+        print(symbolTable)
+        secondRun = Parser(filePath)
+        while secondRun.hasMoreLines():
+            secondRun.advance()
+            kindOfInstruction = secondRun.instructionType()
+            if kindOfInstruction == 'A_INSTRUCTION':
+                instruction = secondRun.symbol()
+                if instruction[0].isdigit():
+                    file.write('0' + format(int(instruction), '015b') + '\n')
+                if instruction in symbolTable:
+                    file.write('0' + format(symbolTable[instruction], '015b') + '\n')
+            elif kindOfInstruction == 'C_INSTRUCTION':
+                cInstruct = ['111']
+                cInstruct.append(comparison(secondRun.comp()))
+                cInstruct.append(destination(secondRun.dest()))
+                # print(destination(secondRun.dest()))
+                # print(comparison(secondRun.comp()))
+                cInstruct.append(jumper(secondRun.jump()))
+                # print(jumper(secondRun.jump()))
+                file.write(''.join(cInstruct) + '\n')
 
-def aInstruct(decimalNum):
-    fBin = [0]*15
-    bin = [1]
-    for x in range(1,15):
-        bin.insert(0, 2**x)
-
-    for pos in range(len(fBin)):
-        if bin[pos] > decimalNum:
-            continue
-        elif bin[pos] == decimalNum:
-            fBin[pos] = 1
-            break
-        elif bin[pos] < decimalNum:
-            fBin[pos] = 1
-            decimalNum -= bin[pos]
-            continue
-    return fBin
-
-def main():
-    nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-
-    parser = argparse.ArgumentParser(description="Process a file.")
-    parser.add_argument('filename', type=str, help="The file to be processed")
-
-
-    args = parser.parse_args()
-    with open(args.filename, 'r') as file:
-        for lines in file:
-            lines = lines.replace(' ', '')
-            if lines[0] == '':
-                continue
-            elif lines[0:2] == "//":
-                continue
-            elif lines[0] == "@":
-                # convert into binary a-instruct
-                address = int(lines[1:])
-
-                # write to conversion file
-            else:
-                lines = 
-                # convert into binary c-instruct
-                # write to conversion file
-
-
-    
-
-if __name__ == "__main__":
-    # main()
-    # print(aInstruct(0))
-    print(aInstruct(31))
-    print(aInstruct(1025))
+if __name__ == '__main__':
+    fyle = 'max/Max.asm'
+    assemble(fyle)
 
